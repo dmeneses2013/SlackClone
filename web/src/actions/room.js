@@ -46,6 +46,7 @@ export function leaveChannel(channel) {
 }
 
 export function createMessage(channel, data) {
+  console.log(data)
   return dispatch => new Promise((resolve, reject) => {
     channel.push('new_message', data)
       .receive('ok', () => resolve(

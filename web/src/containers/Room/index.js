@@ -7,7 +7,7 @@ import MessageList from '../../components/MessageList';
 import MessageForm from '../../components/MessageForm';
 import RoomNavbar from '../../components/RoomNavbar';
 import RoomSidebar from '../../components/RoomSidebar';
-
+var giphy = require('giphy-api')('6pnpv5D6GRVm8ZbfI6I5PQ7WRmXm4IMc');
 
 type MessageType = {
   id: number,
@@ -46,6 +46,7 @@ class Room extends Component {
     this.state = {
       isLoading: true,
     }
+    this.makeMessage = this.makeMessage.bind(this);
   }
 
   componentDidMount() {
@@ -76,8 +77,26 @@ class Room extends Component {
     )
 
   handleMessageCreate = (data) => {
-    this.props.createMessage(this.props.channel, data);
+    console.log(this.props);
+    let channel = this.props.channel;
+    var symbol = data.text;
+    if (symbol.charAt(0) !== '/') {
+      this.props.createMessage(channel, data);
+    } else {
+      symbol = symbol.substring(6);
+      let props = this.props;
+      giphy.random(symbol).then(function (res) {
+        if (res.data.images) {
+          data.text = res.data.images.original.url
+          props.createMessage(channel, data);
+        }
+      });
+    }
   //  this.messageList.scrollToBottom();
+  }
+
+  makeMessage = (object) => {
+    this.props.createMessage(this.props.channel, this.handleMessageCreate(object));
   }
 
   render() {
