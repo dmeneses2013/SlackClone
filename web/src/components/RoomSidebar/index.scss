@@ -1,0 +1,84 @@
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans+JP);
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400);
+
+$base-fontcolor: rgb(197,183,198);
+$base-fontcolorhiglight: #fff;
+$font-stack: NotoSansJP;
+$background-base: #3F0E40;
+$background-highlight: #1d1c1d;
+$backgtound-selected: #1164A3;
+
+
+.room-sidebar {
+  color: $base-fontcolor;
+  background: $background-base;
+  font-family: 'Lato';
+  font-weight: 200;
+  min-width: 220px;
+    h1, h2, h3, li{
+      padding-left: 0.8em;
+    }
+    h2 { font-size: 0.96rem;}
+    ul {
+      list-style-type: none;
+      text-align: left;
+      list-style-position: inside;
+      padding-left: 0
+    }
+    .header{
+      width: 98%;
+      padding: 0.1em;
+      margin-top: 4px;
+      line-height: 8px;
+        h1 {
+          color: $base-fontcolorhiglight;
+          font-size: 1.1rem;}
+        h2 {
+          font-weight: 1;
+          padding-top: 2px;
+          margin-left: 2px;
+        }
+        &:hover {
+          cursor: pointer;
+          color: $base-fontcolorhiglight;
+          background-color: darken($background-base, 2.5%);
+        }
+      }
+    .channels {
+      width: 100%;
+      line-height: 22px;
+        h2 {
+          margin-bottom: -14px;
+          font-weight: 500;
+          &:hover {
+            cursor: pointer;
+            color: $base-fontcolorhiglight;
+            }
+        }
+        li {
+          width: inherit;
+          &:hover { cursor: pointer; background-color: darken($background-base, 2.5%); }
+          &.selected {
+            color: $base-fontcolorhiglight;
+            background: #1264a3;
+            &hover { background: #1264a3; }
+          }
+        }
+
+        a {
+          display:block;
+          font-size: 0.96rem;
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+    .users {
+      h2 {
+        margin-bottom: -14px;
+      }
+    }
+
+
+
+
+}

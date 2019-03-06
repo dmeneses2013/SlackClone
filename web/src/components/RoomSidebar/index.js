@@ -1,55 +1,10 @@
 // @flow
-import React from 'react';
-import { css, StyleSheet } from 'aphrodite';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import './index.scss';
+import { joinRoom } from '../../actions/rooms';
 
-const styles = StyleSheet.create({
-  roomSidebar: {
-    color: '#ab9ba9',
-    background: '#4d394b',
-  },
-
-  header: {
-    padding: '20px 15px',
-    marginBottom: '10px',
-    width: '220px',
-  },
-
-  roomName: {
-    marginBottom: '0',
-    fontSize: '22px',
-    lineHeight: '1',
-    color: '#fff',
-  },
-
-  userList: {
-    paddingLeft: '15px',
-    listStyle: 'none',
-  },
-
-  username: {
-    position: 'relative',
-    paddingLeft: '20px',
-    fontSize: '14px',
-    fontWeight: '300',
-    ':after': {
-      position: 'absolute',
-      top: '7px',
-      left: '0',
-      width: '8px',
-      height: '8px',
-      borderRadius: '50%',
-      background: 'rgb(64,151,141)',
-      content: '""',
-    },
-  },
-
-  listHeading: {
-    marginLeft: '15px',
-    marginBottom: '5px',
-    fontSize: '13px',
-    textTransform: 'uppercase',
-  },
-});
 
 type User = {
   id: number,
@@ -58,26 +13,62 @@ type User = {
 
 type Props = {
   room: {
+    id: number,
     name: string,
   },
   currentUser: {
     username: string,
   },
+  currentRoom: {},
   presentUsers: Array<User>,
+  currentUserRoomIds: Array,
+  roomList: Array<Room>,
+  joinRoom: () => void,
 }
 
-const RoomSidebar = ({ room, currentUser, presentUsers }: Props) =>
-  <div className={css(styles.roomSidebar)}>
-    <div className={css(styles.header)}>
-      <h2 className={css(styles.roomName)}>{room.name}</h2>
-      <div style={{ fontSize: '13px' }}>{currentUser.username}</div>
-    </div>
-    <div className={css(styles.listHeading)}>Active Users</div>
-    <ul className={css(styles.userList)}>
-      {presentUsers.map(user =>
-        <li key={user.id} className={css(styles.username)}>{user.username}</li>
-      )}
-    </ul>
-  </div>;
+class RoomSidebar extends Component {
 
-export default RoomSidebar;
+  handleChannelClick = () => {
+    this.props.history.push('/');
+  }
+
+render() {
+  const {room ,currentUser, roomName, presentUsers, currentUserRoomIds,roomList, onRoomJoin, onRoomClick } = this.props;
+  return(
+      <div className={"room-sidebar"}>
+        <div className={"header"}>
+          <h1>Slack Clone</h1>
+          <h2>{currentUser.username}</h2>
+        </div>
+        <div className={"channels"}>
+        <h2 onClick={this.handleChannelClick}>Channels</h2>
+        <ul>
+          {roomList.map(room =>
+            <li key={room.id} id={room.id} className={(this.props.room.id === room.id)? "selected" : ''} onClick={this.handleClick}>
+              <Link to={`/r/${room.id}` }>
+                  # {room.name}
+              </Link>
+            </li>
+          )}
+        </ul>
+        </div>
+        <div className={"users"}>
+          <h2>Users</h2>
+            <ul>
+              {presentUsers.map(user =>
+                <li key={user.id}>
+                  <span>{user.username} </span>
+                </li>
+              )}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default connect(
+  state => ({
+    room: state.room.currentRoom,
+  }),
+  {joinRoom})(RoomSidebar);

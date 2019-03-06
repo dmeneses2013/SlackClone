@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { css, StyleSheet } from 'aphrodite';
 import Input from '../Input';
+import SignupAvatars from '../SignupAvatars';
 
 const styles = StyleSheet.create({
   card: {
@@ -20,14 +21,30 @@ type Props = {
 }
 
 class SignupForm extends Component {
-  props: Props
 
-  handleSubmit = data => this.props.onSubmit(data);
+  constructor(props) {
+    super(props);
+    this.state = {
+      image: '',
+    };
+  }
+
+  handleSubmit = (data) => {
+    data.image = this.state.image;
+    console.log("AWDAWD???>>>>" + JSON.stringify(data))
+    this.props.onSubmit(data);
+  }
+
+  addAvatar = url => {
+    this.setState({image: url})
+}
 
   render() {
     const { handleSubmit, submitting } = this.props;
 
     return (
+      <div>
+        <SignupAvatars onClick={this.addAvatar} />
       <form
         className={`card ${css(styles.card)}`}
         onSubmit={handleSubmit(this.handleSubmit)}
@@ -66,6 +83,7 @@ class SignupForm extends Component {
           Login to your account
         </Link>
       </form>
+      </div>
     );
   }
 }

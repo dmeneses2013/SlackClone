@@ -14,4 +14,5 @@ defmodule Slackclone.UserRoom do
     |> validate_required([:user_id, :room_id])
     |> unique_constraint(:user_id_room_id)
   end
+
 end

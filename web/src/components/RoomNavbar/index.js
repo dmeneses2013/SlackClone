@@ -1,24 +1,30 @@
 // @flow
 import React from 'react';
-import { css, StyleSheet } from 'aphrodite';
+import './index.scss';
+import UserLogo from '../../assets/images/UserLogo.png';
+import star from '../../assets/images/star.png';
+import moment from 'moment';
+import groupBy from 'lodash/groupBy';
+import mapKeys from 'lodash/mapKeys';
 
 type Props = {
   room: {
     name: string,
   },
+  users: Array<User>,
 }
 
-const styles = StyleSheet.create({
-  navbar: {
-    padding: '15px',
-    background: '#fff',
-    borderBottom: '1px solid rgb(240,240,240)',
-  },
-});
-
-const RoomNavbar = ({ room }: Props) =>
-  <nav className={css(styles.navbar)}>
-    <div>"Hi"</div>
+const RoomNavbar = ({ room, users }: Props) =>
+  <nav className={"room-navbar"}>
+    <h3># {room.name}</h3>
+    <div className={"navbar-subtitle"}>
+      <img src={star}/>
+        <span> | </span>
+        <img src={UserLogo}/>
+        <h4 className={"user-count"}>{users.length}</h4>
+        <span> | </span>
+    </div>
+    <div className={"navbar-day"}></div>
   </nav>;
 
 export default RoomNavbar;

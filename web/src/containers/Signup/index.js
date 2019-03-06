@@ -12,8 +12,6 @@ type Props = {
 
 class Signup extends Component {
 
-  props: Props
-
   handleSignup = data => {
     this.props.signup(data, this.props.history);
   }

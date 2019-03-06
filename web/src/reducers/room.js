@@ -15,12 +15,12 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
+  console.log("REDUE >>>> " + state.currentRoom.id)
   switch (action.type) {
     case 'ROOM_CONNECTED_TO_CHANNEL':
-      console.log("Channel hit with channel: " + action.channel)
       return {
         ...state,
-        channel: action.channel, 
+        channel: action.channel,
         currentRoom: action.response.room,
         messages: action.response.messages.reverse(),
         pagination: action.response.pagination,
@@ -36,6 +36,7 @@ export default function (state = initialState, action) {
         ],
       };
     case 'ROOM_PRESENCE_UPDATE':
+    console.log("Room presnce update");
       return {
         ...state,
         presentUsers: action.presentUsers,

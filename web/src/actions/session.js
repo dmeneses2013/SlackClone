@@ -2,6 +2,7 @@ import { reset } from 'redux-form';
 import { Socket } from 'phoenix';
 import api from '../api';
 import { fetchUserRooms } from './rooms';
+import { connectToChannel } from './room';
 
 const API_URL = process.env.REACT_APP_API_URL;
 const WEBSOCKET_URL = API_URL.replace(/(https|http)/, 'ws').replace('/api', '');
@@ -29,10 +30,9 @@ export function login(data, history) {
     .then((response) => {
       setCurrentUser(dispatch, response);
       dispatch(reset('login'));
-      history.push('/');
+      history.push('/r/1');
     });
 }
-
 
 export function signup(data, history) {
   return dispatch => api.post('/users', data)

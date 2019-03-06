@@ -1,11 +1,13 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component }  from 'react';
+import ReactDOM from 'react';
 import { connect } from 'react-redux';
-import { connectToChannel, leaveChannel, createMessage, loadOlderMessages } from '../../actions/room'; // add loadOlderMessages
+import { connectToChannel, leaveChannel, createMessage, loadOlderMessages } from '../../actions/room';
 import MessageList from '../../components/MessageList';
 import MessageForm from '../../components/MessageForm';
 import RoomNavbar from '../../components/RoomNavbar';
 import RoomSidebar from '../../components/RoomSidebar';
+
 
 type MessageType = {
   id: number,
@@ -25,6 +27,8 @@ type Props = {
   presentUsers: Array,
   currentUser: Object,
   loadingOlderMessages: boolean,
+  currentUserRooms: Array<Room>,
+  currentUserRoomIds: Array,
   pagination: {
     total_pages: number,
     total_entries: number,
@@ -32,30 +36,38 @@ type Props = {
     page_number: number,
   },
   loadOlderMessages: () => void,
+  onRoomJoin: () => void,
 }
 
 class Room extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      isLoading: true,
+    }
+  }
+
   componentDidMount() {
-    console.log("Room did mount with socket: " + JSON.stringify(this.props.socket));
-    console.log("Room did mount with roomid: " + JSON.stringify(this.props.match.params.id));
+    if (this.props.socket === null) { return }
     this.props.connectToChannel(this.props.socket, this.props.match.params.id);
   }
 
   componentDidUpdate(prevProps) {
+    // If user refreshes screen, need to get messages again..
+    if (prevProps.socket === null) {
+      this.props.connectToChannel(this.props.socket, this.props.match.params.id);
+    }
+    // If browser has changed channels, connect to new channel..
     if (prevProps.match.params.id !== this.props.match.params.id) {
       this.props.leaveChannel(this.props.channel);
-      this.props.connectToChannel(prevProps.socket, prevProps.match.params.id);
-    }
-    if (!this.props.socket && prevProps.socket) {
-      this.props.connectToChannel(prevProps.socket, prevProps.match.params.id);
+      this.props.connectToChannel(prevProps.socket, this.props.match.params.id);
     }
   }
 
   componentWillUnmount() {
     this.props.leaveChannel(this.props.channel);
   }
-
-  props: Props
 
   handleLoadMore = () =>
     this.props.loadOlderMessages(
@@ -65,29 +77,41 @@ class Room extends Component {
 
   handleMessageCreate = (data) => {
     this.props.createMessage(this.props.channel, data);
-    //this.messageList.scrollToBottom();
+  //  this.messageList.scrollToBottom();
   }
 
   render() {
     const moreMessages = this.props.pagination.total_pages > this.props.pagination.page_number;
+    const { isLoading } = this.state;
 
     return (
-      <div style={{ display: 'flex', height: '100vh' }}>
+      <div style={{ display: 'flex', height: '100vh', width: '90%', minWidth: '400px'}}>
         <RoomSidebar
           room={this.props.room}
+          roomList={this.props.currentUserRooms}
           currentUser={this.props.currentUser}
           presentUsers={this.props.presentUsers}
+          onRoomClick={this.handleRoomJoin}
+          history={this.props.history}
         />
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <RoomNavbar room={this.props.room} />
-          <MessageList // updated props
-            moreMessages={moreMessages}
-            messages={this.props.messages}
-            onLoadMore={this.handleLoadMore}
-            ref={(c) => { this.messageList = c; }}
-            loadingOlderMessages={this.props.loadingOlderMessages}
-          />
-          <MessageForm onSubmit={this.handleMessageCreate} />
+      <div className={"message-window"} style={{ display: 'flex', flexDirection: 'column', width: "100%" }}>
+          <RoomNavbar
+            room={this.props.room}
+            users={this.props.presentUsers}
+            />
+          {!this.props.channel?
+            <div></div>
+              :
+            <MessageList
+              moreMessages={moreMessages}
+              currentUser={this.props.currentUser}
+              messages={this.props.messages}
+              onLoadMore={this.handleLoadMore}
+              ref={(c) => { this.messageList = c; }}
+              loadingOlderMessages={this.props.loadingOlderMessages}
+            />
+           }
+          <MessageForm onSubmit={this.handleMessageCreate} room={this.props.room.name? this.props.room.name : "unavailable" } />
         </div>
       </div>
     );
@@ -104,6 +128,7 @@ export default connect(
     currentUser: state.session.currentUser,
     pagination: state.room.pagination,
     loadingOlderMessages: state.room.loadingOlderMessages,
+    currentUserRooms: state.rooms.currentUserRooms
   }),
   { connectToChannel, leaveChannel, createMessage, loadOlderMessages }
 )(Room);

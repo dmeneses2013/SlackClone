@@ -5,6 +5,7 @@ defmodule Slackclone.UserController do
 
   plug Guardian.Plug.EnsureAuthenticated, [handler: Slackclone.SessionController] when action in [:rooms]
 
+
   def create(conn, params) do
     changeset = User.registration_changeset(%User{}, params)
 
@@ -23,10 +24,10 @@ defmodule Slackclone.UserController do
     end
   end
 
-  def rooms(conn, _params) do
-    current_user = Guardian.Plug.current_resource(conn)
-    rooms = Repo.all(assoc(current_user, :rooms))
-    render(conn, Slackclone.RoomView, "index.json", %{rooms: rooms})
-  end
 
+    def rooms(conn, _params) do
+      current_user = Guardian.Plug.current_resource(conn)
+      rooms = Repo.all(assoc(current_user, :rooms))
+      render(conn, Slackclone.RoomView, "index.json", %{rooms: rooms})
+    end
 end

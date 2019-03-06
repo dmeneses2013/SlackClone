@@ -1,0 +1,24 @@
+form {
+  background: #fff;
+  width: 100%;
+  padding-top: -20px;
+  input {
+    font-size: 15px;
+    height: 38px;
+    width: 98%;
+    margin: 0 22px 22px 12px;
+    text-indent: 10px;
+    border: solid #616061 1.8px;
+    border-radius: .375rem;
+    outline: none;
+    &::placeholder {
+        color: lighten(#1d1c1d, 50%);;
+    }
+  }
+  button {
+    color: 'rgb(80,80,80)';
+    background: 'rgb(214,214,214)';
+    borderWidth: '2px';
+    borderColor: 'rgb(214,214,214)';
+  }
+}

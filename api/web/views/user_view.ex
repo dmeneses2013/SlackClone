@@ -6,6 +6,7 @@ defmodule Slackclone.UserView do
       id: user.id,
       username: user.username,
       email: user.email,
+      image: user.image,
     }
   end
 end

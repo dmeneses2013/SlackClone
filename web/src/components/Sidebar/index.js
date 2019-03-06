@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
     },
   },
 
+  settingsImg: {
+    width: "inherit"
+  },
+
+
   activeLink: {
     color: '#fff',
     ':after': {
@@ -70,7 +75,9 @@ type RoomLinkProps = {
 const RoomLink = ({ room }: RoomLinkProps) =>
   <Link to={`/r/${room.id}`} className={css(styles.link)}>
     <div className={css(styles.badge)}>
-      <span>{room.name.charAt(0)}</span>
+      <img src="http://www.logospng.com/images/61/iconfinder-iconico-by-nicolas-rubio-61578.png">
+      <span>SCI</span>
+      </img>
     </div>
   </Link>;
 
@@ -82,7 +89,6 @@ type Props = {
 
 const Sidebar = ({ rooms, router, onLogoutClick }: Props) =>
   <div className={css(styles.sidebar)}>
-    {rooms.map(room => <RoomLink key={room.id} room={room} />)}
     <Link
       to="/"
       className={css(styles.link)}
@@ -97,6 +103,7 @@ const Sidebar = ({ rooms, router, onLogoutClick }: Props) =>
       className={css(styles.link, styles.logoutButton)}
     >
       <div className={css(styles.badge)}>
+        <img src="http://www.logospng.com/images/61/iconfinder-iconico-by-nicolas-rubio-61578.png" className={css(styles.settingsImg)} />
         <span className="fa fa-sign-out" />
       </div>
     </button>

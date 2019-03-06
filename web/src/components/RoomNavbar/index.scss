@@ -1,0 +1,38 @@
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans+JP);
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700,800,900);
+
+$base-fontcolor: #616061;
+
+.room-navbar {
+  padding: '15px';
+  background-color: #fff;
+  padding: 1em;
+  padding-left: 10px;
+  margin-top: -1.7em;
+  font-family: 'Lato';
+  height: 64px;
+  padding-bottom: 0px;
+  z-index: 10;
+  .navbar-subtitle {
+    position: relative;
+    margin-top: -34px;
+    letter-spacing: 0.2em;
+    color: $base-fontcolor;
+    img {
+      height: 10px;
+      width: 10px;
+    }
+    h4 {
+      font-size: 13px;
+      padding-left: 4px;
+      font-weight: 100;
+      display: inline-block;
+    }
+    span {
+      font-size: 13px;
+      padding-left: 1px;
+      padding-right: 1px;
+      color: lighten($base-fontcolor, 40%);
+    }
+  }
+}

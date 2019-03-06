@@ -6,7 +6,9 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
+    console.log(state.currentUser)
   switch (action.type) {
+
     case 'AUTHENTICATION_REQUEST':
       return {
         ...state,

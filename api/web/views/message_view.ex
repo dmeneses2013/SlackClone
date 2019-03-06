@@ -15,7 +15,8 @@ defmodule Slackclone.MessageView do
       text: message.text,
       user: %{
         email: message.user.email,
-        username: message.user.username
+        username: message.user.username,
+        image: message.user.image
       }
     }
   end

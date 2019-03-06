@@ -17,7 +17,7 @@ defmodule Slackclone.RoomChannel do
       messages: Phoenix.View.render_many(page.entries, Slackclone.MessageView, "message.json"),
       pagination: Slackclone.PaginationHelpers.pagination(page)
     }
-
+    send(self, :after_join)
     {:ok, response, assign(socket, :room, room)}
   end
 

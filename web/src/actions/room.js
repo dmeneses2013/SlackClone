@@ -1,6 +1,6 @@
 import { reset } from 'redux-form';
 import api from '../api';
-import { Presence } from 'phoenix'; 
+import { Presence } from 'phoenix';
 
 const syncPresentUsers = (dispatch, presences) => {
   const presentUsers = [];
@@ -14,7 +14,6 @@ export function connectToChannel(socket, roomId) {
     if (!socket) { return false; }
     const channel = socket.channel(`room:${roomId}`);
     let presences = {};
-
     channel.on('presence_state', (state) => {
       presences = Presence.syncState(presences, state);
       syncPresentUsers(dispatch, presences);

@@ -9,6 +9,10 @@ defmodule Slackclone.RoomView do
     %{data: render_one(room, Slackclone.RoomView, "room.json")}
   end
 
+  def render("errorprivate.json", %{room: room}) do
+    %{errors: %{detail: "Internal server server error"}}
+  end
+
   def render("room.json", %{room: room}) do
     %{id: room.id,
       name: room.name,

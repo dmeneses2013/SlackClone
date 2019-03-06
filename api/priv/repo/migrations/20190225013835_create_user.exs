@@ -6,7 +6,7 @@ defmodule Slackclone.Repo.Migrations.CreateUser do
       add :username, :string
       add :email, :string
       add :password_hash, :string
-
+      add :image, :string
       timestamps()
     end
 

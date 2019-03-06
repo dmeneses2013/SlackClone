@@ -5,6 +5,8 @@ defmodule Slackclone.Repo.Migrations.CreateRoom do
     create table(:rooms) do
       add :name, :string, null: false
       add :topic, :string, default: ""
+      add :private, :boolean, default: false
+      add :direct, :boolean, default: false
 
       timestamps()
     end

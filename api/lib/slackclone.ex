@@ -12,7 +12,7 @@ defmodule Slackclone do
       supervisor(Slackclone.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Slackclone.Endpoint, []),
-      supervisor(Slackclone.Presence, []),
+      supervisor(Slackclone.Presence, []), 
       # Start your own worker by calling: Slackclone.Worker.start_link(arg1, arg2, arg3)
       # worker(Slackclone.Worker, [arg1, arg2, arg3]),
     ]

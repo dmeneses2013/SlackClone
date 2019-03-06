@@ -45,7 +45,6 @@ class Home extends Component {
   renderRooms() {
     const currentUserRoomIds = [];
     this.props.currentUserRooms.map(room => currentUserRoomIds.push(room.id));
-
     return this.props.rooms.map(room =>
       <RoomListItem
         key={room.id}
