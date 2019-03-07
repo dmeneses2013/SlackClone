@@ -46,7 +46,6 @@ class Room extends Component {
     this.state = {
       isLoading: true,
     }
-    this.makeMessage = this.makeMessage.bind(this);
   }
 
   componentDidMount() {
@@ -77,7 +76,6 @@ class Room extends Component {
     )
 
   handleMessageCreate = (data) => {
-    console.log(this.props);
     let channel = this.props.channel;
     var symbol = data.text;
     if (symbol.charAt(0) !== '/') {
@@ -93,10 +91,6 @@ class Room extends Component {
       });
     }
   //  this.messageList.scrollToBottom();
-  }
-
-  makeMessage = (object) => {
-    this.props.createMessage(this.props.channel, this.handleMessageCreate(object));
   }
 
   render() {

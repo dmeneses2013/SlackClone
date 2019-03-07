@@ -39,6 +39,7 @@ export function signup(data, history) {
     .then((response) => {
       setCurrentUser(dispatch, response);
       dispatch(reset('signup'));
+      console.log("AWDAWDAWD<<<<<");
       history.push('/');
     });
 }

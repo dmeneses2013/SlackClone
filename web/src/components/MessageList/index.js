@@ -1,10 +1,13 @@
 // @flow
-import React, { Component } from 'react';
+import React, { useRef, useLayoutEffect, Component } from 'react';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import mapKeys from 'lodash/mapKeys';
 import Message from '../Message';
 import './index.scss';
+//import useStayScrolled from 'react-stay-scrolled';
+import StayScrolled from 'react-stay-scrolled';
+
 
 type MessageType = {
   id: number,
@@ -17,10 +20,22 @@ type Props = {
 
 class MessageList extends Component {
 
+  scrollToBottom = () => {
+    var a = this.stayScrolledElem.scrollTop
+    var b = this.stayScrolledElem.scrollHeight - this.stayScrolledElem.clientHeight;
+    var c = a / b;
+    let shouldScroll = (c > 0.93)
+    if (shouldScroll) {
+      this.messagesEnd.scrollIntoView({ behavior: "auto" });
+    }
+  }
+
   renderMessages = messages =>
     messages.map(message => <Message key={message.id} message={message} />);
 
+
   renderDays() {
+
     const { messages } = this.props;
     messages.map(message => message.day = moment(message.inserted_at).format('MMMM Do'));
     const dayGroups = groupBy(messages, 'day');
@@ -32,7 +47,7 @@ class MessageList extends Component {
     const yesterday = moment().subtract(1, 'days').format('MMMM Do');
     return days.map(day =>
       <div className={"inner"}>
-      <div key={day.date} className={"messages-list"}>
+      <div key={day.date} className={"messages-list"} ref={c => { this.stayScrolledElem = c; }}>
         <div className={"daydivider"}>
           <span className={"daytext"}>
             {day.date === today && 'Today'}
@@ -41,6 +56,9 @@ class MessageList extends Component {
           </span>
         </div>
         {this.renderMessages(day.messages)}
+        <div style={{ float:"left", clear: "both" }}
+             ref={(el) => { this.messagesEnd = el; }}>
+        </div>
         </div>
       </div>
     );

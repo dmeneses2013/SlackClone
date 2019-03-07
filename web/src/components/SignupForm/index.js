@@ -31,7 +31,6 @@ class SignupForm extends Component {
 
   handleSubmit = (data) => {
     data.image = this.state.image;
-    console.log("AWDAWD???>>>>" + JSON.stringify(data))
     this.props.onSubmit(data);
   }
 
