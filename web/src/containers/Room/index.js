@@ -1,13 +1,16 @@
 // @flow
 import React, { Component }  from 'react';
-import ReactDOM from 'react';
 import { connect } from 'react-redux';
-import { connectToChannel, leaveChannel, createMessage, loadOlderMessages } from '../../actions/room';
+import { connectToChannel, leaveChannel, createMessage, loadOlderMessages, editTopic, displayTopicForm, dismissTopicForm } from '../../actions/room';
 import MessageList from '../../components/MessageList';
 import MessageForm from '../../components/MessageForm';
 import RoomNavbar from '../../components/RoomNavbar';
 import RoomSidebar from '../../components/RoomSidebar';
-var giphy = require('giphy-api')('6pnpv5D6GRVm8ZbfI6I5PQ7WRmXm4IMc');
+import RoomTopicForm from '../../components/RoomTopicForm';
+var giphy = require('giphy-api')({
+  'apiKey':'6pnpv5D6GRVm8ZbfI6I5PQ7WRmXm4IMc',
+  'https' : true
+  });
 
 type MessageType = {
   id: number,
@@ -17,9 +20,6 @@ type Props = {
   socket: any,
   channel: any,
   room: Object,
-  params: {
-    id: number,
-  },
   connectToChannel: () => void,
   leaveChannel: () => void,
   createMessage: () => void,
@@ -71,9 +71,13 @@ class Room extends Component {
 
   handleLoadMore = () =>
     this.props.loadOlderMessages(
-      this.props.match.params.id,
+      this.props.room.id,
       { last_seen_id: this.props.messages[0].id }
     )
+
+  handleEditTopic = (e) => {
+    this.props.displayTopicForm();
+  }
 
   handleMessageCreate = (data) => {
     let channel = this.props.channel;
@@ -85,12 +89,30 @@ class Room extends Component {
       let props = this.props;
       giphy.random(symbol).then(function (res) {
         if (res.data.images) {
-          data.text = res.data.images.original.url
+          data.text = res.data.images.fixed_height.url
           props.createMessage(channel, data);
         }
       });
     }
-  //  this.messageList.scrollToBottom();
+  }
+
+  handleTopicSubmit = (e) => {
+    const body = {"topic": e.target[0].defaultValue};
+    e.preventDefault();
+    this.props.editTopic(this.props.room.id, body)
+  }
+
+  closeTopicForm = (e) => {
+    let value = e.target.defaultValue
+    if (e.target.defaultValue === '') {
+      this.props.dismissTopicForm();
+      return
+    }
+    let body = {"topic" : e.target.defaultValue }
+    if (this.props.room.topic !== e.target.defaultValue) {
+      this.props.editTopic(this.props.room.id, body)
+    }
+    this.props.dismissTopicForm();
   }
 
   render() {
@@ -98,7 +120,7 @@ class Room extends Component {
     const { isLoading } = this.state;
 
     return (
-      <div style={{ display: 'flex', height: '100vh', width: '90%', minWidth: '400px'}}>
+      <div style={{ display: 'flex', height: '100vh', width: '90%', minWidth: '400px'}} ref={(el) => { this.container = el; }}>
         <RoomSidebar
           room={this.props.room}
           roomList={this.props.currentUserRooms}
@@ -110,7 +132,12 @@ class Room extends Component {
       <div className={"message-window"} style={{ display: 'flex', flexDirection: 'column', width: "100%" }}>
           <RoomNavbar
             room={this.props.room}
+            topic={this.props.room.topic}
             users={this.props.presentUsers}
+            onEditClick={this.handleEditTopic}
+            onTopicSubmit={this.handleTopicSubmit}
+            topicFormIsVisible={this.props.topicFormIsVisible}
+            closeTopicForm={this.closeTopicForm}
             />
           {!this.props.channel?
             <div></div>
@@ -141,7 +168,8 @@ export default connect(
     currentUser: state.session.currentUser,
     pagination: state.room.pagination,
     loadingOlderMessages: state.room.loadingOlderMessages,
-    currentUserRooms: state.rooms.currentUserRooms
+    currentUserRooms: state.rooms.currentUserRooms,
+    topicFormIsVisible: state.room.topicFormIsVisible,
   }),
-  { connectToChannel, leaveChannel, createMessage, loadOlderMessages }
+  { connectToChannel, leaveChannel, createMessage, loadOlderMessages, displayTopicForm, editTopic, dismissTopicForm}
 )(Room);

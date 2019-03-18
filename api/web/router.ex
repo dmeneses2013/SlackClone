@@ -23,7 +23,6 @@ defmodule Slackclone.Router do
 
   scope "/api", Slackclone do
     pipe_through :api
-
     post "/sessions", SessionController, :create
     delete "/sessions", SessionController, :delete
     post "/sessions/refresh", SessionController, :refresh
@@ -31,7 +30,8 @@ defmodule Slackclone.Router do
     post "/users/image", UserController, :update
     get "/users/:id/rooms", UserController, :rooms
     post "/rooms/:id/join", RoomController, :join
-    resources "/rooms", RoomController, only: [:index, :create] do
+    post "/rooms/:id/update", RoomController, :update
+    resources "/rooms", RoomController, only: [:index, :create, :update] do
       resources "/messages", MessageController, only: [:index]
       end
     end

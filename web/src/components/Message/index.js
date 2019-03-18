@@ -6,6 +6,7 @@ import './index.scss';
 
 type Props = {
   message: {
+    id: number,
     text: string,
     inserted_at: string,
     user: {
@@ -16,8 +17,8 @@ type Props = {
   }
 }
 
-const Message = ({ message: { text, inserted_at, user } }: Props) =>
-  <div style={{ display: 'flex', marginBottom: '10px' }}>
+const Message = ({ message: { id, text, inserted_at, user } }: Props) =>
+  <div key={id} style={{ display: 'flex', marginBottom: '10px' }}>
     <Avatar email={user.email} image={user.image} style={{ marginRight: '10px' }} />
     <div>
       <div style={{ lineHeight: '1.2' }}>
@@ -25,9 +26,9 @@ const Message = ({ message: { text, inserted_at, user } }: Props) =>
         <time style={{ fontSize: '12px', color: 'rgb(192,192,192)' }}>{moment(inserted_at).format('h:mm A')}</time>
       </div>
       {text.includes("giphy.com/media")?
-        <img src={text} style={{ marginTop: '10px' }}/>
+        <img src={text} alt={"w.com./oops"} style={{ marginTop: '10px' }}/>
         :
-        <div class="message-text">{text}</div>
+        <div className="message-text">{text}</div>
 
         }
     </div>

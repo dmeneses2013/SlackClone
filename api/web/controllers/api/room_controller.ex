@@ -3,7 +3,6 @@ defmodule Slackclone.RoomController do
 
   alias Slackclone.Room
 
-  plug Guardian.Plug.EnsureAuthenticated, handler: Slackclone.SessionController
 
   def index(conn, _params) do
     rooms = Repo.all(Room)
@@ -31,6 +30,23 @@ defmodule Slackclone.RoomController do
         |> render(Slackclone.ChangesetView, "error.json", changeset: changeset)
     end
   end
+
+  def update(conn, params) do
+    room = Repo.get(Room, params["id"])
+    |> Repo.preload([:messages])
+    |> Repo.preload([:users])
+    changeset = Room.changeset(room, params)
+    case Repo.update(changeset) do
+      {:ok, result} ->
+        conn
+        |> put_status(:created)
+        |> render("show.json", %{room: result})
+      {:error, _changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+      end
+  end
+
 
   def join(conn, %{"id" => room_id}) do
     current_user = Guardian.Plug.current_resource(conn)

@@ -9,13 +9,11 @@ type Props = {
 }
 
 class NewRoomForm extends Component {
-  props: Props
 
   handleSubmit = data => this.props.onSubmit(data);
 
   render() {
     const { handleSubmit, submitting } = this.props;
-
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <div className="input-group">
@@ -41,6 +39,8 @@ const validate = (values) => {
   const errors = {};
   if (!values.name) {
     errors.name = 'Required';
+  } else if (values.name.length > 24) {
+    errors.name = 'Must be less than 18 characters'
   }
   return errors;
 };

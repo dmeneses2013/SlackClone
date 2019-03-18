@@ -1,13 +1,11 @@
 // @flow
-import React, { useRef, useLayoutEffect, Component } from 'react';
+import React, { useRef, Component } from 'react';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import mapKeys from 'lodash/mapKeys';
 import Message from '../Message';
 import './index.scss';
-//import useStayScrolled from 'react-stay-scrolled';
-import StayScrolled from 'react-stay-scrolled';
-
+import throttle from 'lodash/throttle';
 
 type MessageType = {
   id: number,
@@ -16,26 +14,60 @@ type MessageType = {
 
 type Props = {
   messages: Array<MessageType>,
+  loadOlderMessages: boolean,
 }
 
 class MessageList extends Component {
 
-  scrollToBottom = () => {
+  constructor() {
+    super();
+    this.handleScroll = throttle(this.handleScroll, 2000);
+  }
+
+  componentDidMount() {
+    this.stayScrolledElem.addEventListener('scroll', this.handleScroll);
+    this.scrollToBottom();
+  }
+
+  componentWillUnmount() {
+    this.stayScrolledElem.removeEventListener('scroll', this.handleScroll);
+  }
+
+  componentDidUpdate() {
+    this.checkShouldScroll();
+  }
+
+  handleScroll = () => {
     var a = this.stayScrolledElem.scrollTop
     var b = this.stayScrolledElem.scrollHeight - this.stayScrolledElem.clientHeight;
     var c = a / b;
-    let shouldScroll = (c > 0.93)
+    var shouldLoadMore = (c <= 0.10);
+    if (shouldLoadMore) {
+      this.props.onLoadMore();
+    }
+  }
+
+  checkShouldScroll = () => {
+    var a = this.stayScrolledElem.scrollTop
+    var b = this.stayScrolledElem.scrollHeight - this.stayScrolledElem.clientHeight;
+    var c = a / b;
+    let shouldScroll = (c > 0.02)
     if (shouldScroll) {
-      this.messagesEnd.scrollIntoView({ behavior: "auto" });
+      this.scrollToBottom();
+    }
+  }
+
+  scrollToBottom = () => {
+    if (this.messagesEnd) {
+      this.messagesEnd.scrollIntoView({ behavior: "auto", block: "end" });
     }
   }
 
   renderMessages = messages =>
-    messages.map(message => <Message key={message.id} message={message} />);
+    messages.map(message => <Message key={message.id} message={message} className={"day-message"}/>);
 
 
   renderDays() {
-
     const { messages } = this.props;
     messages.map(message => message.day = moment(message.inserted_at).format('MMMM Do'));
     const dayGroups = groupBy(messages, 'day');
@@ -46,8 +78,8 @@ class MessageList extends Component {
     const today = moment().format('MMMM Do');
     const yesterday = moment().subtract(1, 'days').format('MMMM Do');
     return days.map(day =>
-      <div className={"inner"}>
-      <div key={day.date} className={"messages-list"} ref={c => { this.stayScrolledElem = c; }}>
+      <div key={day.date} className={"day-section"}>
+        <div key={day.date} className={"day-subsection"}>
         <div className={"daydivider"}>
           <span className={"daytext"}>
             {day.date === today && 'Today'}
@@ -56,9 +88,6 @@ class MessageList extends Component {
           </span>
         </div>
         {this.renderMessages(day.messages)}
-        <div style={{ float:"left", clear: "both" }}
-             ref={(el) => { this.messagesEnd = el; }}>
-        </div>
         </div>
       </div>
     );
@@ -66,8 +95,15 @@ class MessageList extends Component {
 
   render() {
     return (
-      <div className={"messages-container"}>
+      <div className={"messages-container"} ref={c => { this.stayScrolledElem = c; }}>
+      <div className={"inner"}>
         {this.renderDays()}
+        <div
+            ref={(el) => { this.messagesEnd = el; }}
+            className={"message-end"}
+             >
+        </div>
+        </div>
       </div>
     );
   }

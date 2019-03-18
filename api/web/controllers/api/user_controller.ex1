@@ -36,7 +36,6 @@ end
     Repo.get_by(User, email: "john@hello.com")
     current_user = Guardian.Plug.current_resource(conn)
     change(image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/440px-Cat03.jpg")
-
   end
 
   def update2(conn, %{"id" => id, "user" => user_params}) do

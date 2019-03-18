@@ -18,7 +18,7 @@ defmodule Slackclone.User do
   def changeset(struct, params \\ %{}) do
      struct
      |> cast(params, [:username, :email, :image])
-     |> validate_required([:username, :email])
+     |> validate_required([:username, :email, :image])
      |> unique_constraint(:username)
      |> unique_constraint(:email)
    end

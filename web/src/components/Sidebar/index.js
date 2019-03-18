@@ -2,12 +2,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { css, StyleSheet } from 'aphrodite';
+import iconSidebar from '../../assets/images/iconSidebar.png';
+
 
 const styles = StyleSheet.create({
   sidebar: {
     display: 'flex',
     flexDirection: 'column',
-    background: 'rgb(38,28,37)',
+    background: 'rgb(38,0,39)',
   },
 
   link: {
@@ -24,7 +26,8 @@ const styles = StyleSheet.create({
   },
 
   settingsImg: {
-    width: "inherit"
+    width: "inherit",
+    borderRadius: "10%",
   },
 
 
@@ -32,8 +35,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     ':after': {
       position: 'absolute',
-      top: '12px',
-      bottom: '12px',
+      top: '8px',
+      bottom: '8px',
       left: '0',
       width: '3px',
       background: 'rgba(255,255,255,.2)',
@@ -75,9 +78,6 @@ type RoomLinkProps = {
 const RoomLink = ({ room }: RoomLinkProps) =>
   <Link to={`/r/${room.id}`} className={css(styles.link)}>
     <div className={css(styles.badge)}>
-      <img src="http://www.logospng.com/images/61/iconfinder-iconico-by-nicolas-rubio-61578.png">
-      <span>SCI</span>
-      </img>
     </div>
   </Link>;
 
@@ -94,6 +94,8 @@ const Sidebar = ({ rooms, router, onLogoutClick }: Props) =>
       className={css(styles.link)}
     >
       <div className={css(styles.badge)}>
+        <img src={iconSidebar} className={css(styles.settingsImg)}>
+        </img>
         <span className="fa fa-plus" />
       </div>
     </Link>
@@ -103,7 +105,7 @@ const Sidebar = ({ rooms, router, onLogoutClick }: Props) =>
       className={css(styles.link, styles.logoutButton)}
     >
       <div className={css(styles.badge)}>
-        <img src="http://www.logospng.com/images/61/iconfinder-iconico-by-nicolas-rubio-61578.png" className={css(styles.settingsImg)} />
+        <img src="https://www.logospng.com/images/61/iconfinder-iconico-by-nicolas-rubio-61578.png" className={css(styles.settingsImg)} />
         <span className="fa fa-sign-out" />
       </div>
     </button>

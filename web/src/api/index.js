@@ -1,4 +1,4 @@
-const API = process.env.REACT_APP_API_URL;
+import API from '../constants/config.js';
 
 function headers() {
   const token = JSON.parse(localStorage.getItem('token'));

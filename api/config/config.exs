@@ -14,7 +14,7 @@ config :slackclone, Slackclone.Endpoint,
   url: [host: "localhost"],
   check_origin: false,
   secret_key_base: "cYAEY1Cd5e4d/WlLiviwHN4cSSm7CZKGn/FClvOOIegnaFMQJTP02NNBmCTHYli8",
-  render_errors: [view: Slackclone.ErrorView, accepts: ~w(json)],
+  render_errors: [view: Slackclone.ErrorView, format: "json", accepts: ~w(json)],
   pubsub: [name: Slackclone.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

@@ -33,34 +33,30 @@ class RoomSidebar extends Component {
   }
 
 render() {
-  const {room ,currentUser, roomName, presentUsers, currentUserRoomIds,roomList, onRoomJoin, onRoomClick } = this.props;
+  const {currentUser, presentUsers, roomList } = this.props;
   return(
-      <div className={"room-sidebar"}>
+      <div className={"room-sidebar-container"}>
         <div className={"header"}>
           <h1>Slack Clone</h1>
           <h2>{currentUser.username}</h2>
         </div>
         <div className={"channels"}>
         <h2 onClick={this.handleChannelClick}>Channels</h2>
-        <ul>
           {roomList.map(room =>
-            <li key={room.id} id={room.id} className={(this.props.room.id === room.id)? "selected" : ''} onClick={this.handleClick}>
+            <div key={room.id} id={room.id} className={(this.props.room.id === room.id)? "selected" : ''} onClick={this.handleClick}>
               <Link to={`/r/${room.id}` }>
                   # {room.name}
               </Link>
-            </li>
+            </div>
           )}
-        </ul>
         </div>
         <div className={"users"}>
           <h2>Users</h2>
-            <ul>
               {presentUsers.map(user =>
-                <li key={user.id}>
-                  <span>{user.username} </span>
-                </li>
+                <div key={user.id}>
+                  <span><span className="dot">● </span>{user.username} </span>
+                </div>
               )}
-          </ul>
         </div>
       </div>
     );

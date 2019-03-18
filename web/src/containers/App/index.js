@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import NotFound from '../../components/NotFound';
 import Home from '../Home';
 import Login from '../Login';

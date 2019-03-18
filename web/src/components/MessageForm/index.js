@@ -17,7 +17,7 @@ class MessageForm extends Component {
   handleSubmit = data => this.props.onSubmit(data);
 
   render() {
-    const { handleSubmit, submitting, room } = this.props;
+    const { handleSubmit, room } = this.props;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)} className={"message-form"}>
         <div className="input-group">

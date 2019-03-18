@@ -45,8 +45,20 @@ export function leaveChannel(channel) {
   };
 }
 
+export function editTopic(roomId, params) {
+  return (dispatch) => {
+    dispatch({type: 'POST_ROOM_TOPIC'});
+    return api.post(`/rooms/${roomId}/update`, params)
+      .then((response) => {
+        dispatch({ type: 'POST_ROOM_TOPIC_SUCCESS', response });
+      })
+      .catch(() => {
+        dispatch({type: 'POST_ROOM_TOPIC_FAILURE'});
+      });
+    };
+}
+
 export function createMessage(channel, data) {
-  console.log(data)
   return dispatch => new Promise((resolve, reject) => {
     channel.push('new_message', data)
       .receive('ok', () => resolve(
@@ -56,12 +68,24 @@ export function createMessage(channel, data) {
   });
 }
 
+export function displayTopicForm() {
+  return (dispatch) => {
+    dispatch({ type: 'TOPIC_FORM_IS_VISIBLE' });
+  };
+}
+
+export function dismissTopicForm() {
+  return (dispatch) => {
+    dispatch({ type: 'TOPIC_FORM_IS_HIDDEN' });
+  };
+}
+
 export function loadOlderMessages(roomId, params) {
   return (dispatch) => {
     dispatch({ type: 'FETCH_MESSAGES_REQUEST' });
     return api.fetch(`/rooms/${roomId}/messages`, params)
       .then((response) => {
-        dispatch({ type: 'FETCH_MESSAGES_SUCCESS', response });
+        dispatch({ type: 'FETCH_MESSAGES_SUCCESS', params });
       })
       .catch(() => {
         dispatch({ type: 'FETCH_MESSAGES_FAILURE' });

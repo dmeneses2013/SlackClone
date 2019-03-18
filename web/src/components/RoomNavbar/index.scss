@@ -1,38 +1,96 @@
-@import url(http://fonts.googleapis.com/css?family=Noto+Sans+JP);
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+JP);
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700,800,900);
 
 $base-fontcolor: #616061;
 
+* {
+margin: 0;
+padding: 0;
+}
+
+
 .room-navbar {
-  padding: '15px';
+  position: relative;
   background-color: #fff;
-  padding: 1em;
-  padding-left: 10px;
-  margin-top: -1.7em;
   font-family: 'Lato';
-  height: 64px;
-  padding-bottom: 0px;
+  min-height: 54px;
+  width: 100%;
   z-index: 10;
-  .navbar-subtitle {
-    position: relative;
-    margin-top: -34px;
+  border-bottom: lighten(black, 80) 0.4px solid;
+  h3 {
+    position: absolute;
+    top: 0.54em;
+    left: 18px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .room-navbar-subtitle {
+    position: absolute;
+    top: 1.8em;
+    left: 18px;
+    height: 60px;
     letter-spacing: 0.2em;
     color: $base-fontcolor;
     img {
-      height: 10px;
-      width: 10px;
+      height: 9px;
+      width: 9px;
     }
     h4 {
-      font-size: 13px;
+      font-size: 11px;
       padding-left: 4px;
-      font-weight: 100;
+      font-weight: 300;
       display: inline-block;
     }
     span {
-      font-size: 13px;
-      padding-left: 1px;
-      padding-right: 1px;
+      font-size: 10px;
       color: lighten($base-fontcolor, 40%);
     }
+    .topic span {
+      font-size: 12px;
+      color: lighten($base-fontcolor, 2%);
+      letter-spacing: 0;
+      white-space: nowrap;
+      button {
+        visibility: hidden;
+      }
+        &:hover {
+          cursor: pointer;
+          button {
+            position: absolute;
+            border: 0;
+            color: blue;
+            margin: auto;
+            visibility: visible;
+            vertical-align: baseline;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+        .topic-text {
+          display: inline-block;
+          max-width: 60%;
+          letter-spacing: 0.04em;
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+            &:hover {
+              position: relative;
+              background-color: darken(white, 3);
+              border: solid 1px darken(white, 20);
+              border-radius: 1%;
+              white-space: normal;
+            }
+          }
+    }
   }
+
+
+.navbar-topic-form{
+    display: inline-block;
+  }
+
+  .ok {
+    vertical-align:middle;
+  }
+
 }

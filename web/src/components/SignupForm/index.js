@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { css, StyleSheet } from 'aphrodite';
 import Input from '../Input';
-import SignupAvatars from '../SignupAvatars';
+import './index.scss';
 
 const styles = StyleSheet.create({
   card: {
@@ -25,27 +25,34 @@ class SignupForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: '',
+      image: "https://f4.bcbits.com/img/a0069281785_10.jpg",
     };
   }
 
   handleSubmit = (data) => {
-    data.image = this.state.image;
+    data.image = this.addAvatar();
     this.props.onSubmit(data);
   }
 
-  addAvatar = url => {
-    this.setState({image: url})
-}
+  addAvatar = () => {
+    const maxUrls = 9;
+    let random = this.getRandomInt(9);
+    let image = "https://s3-ap-southeast-2.amazonaws.com/slackclonedm/slack" + random +  ".png";
+    return image;
+  }
+
+  getRandomInt = (max) => {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
 
   render() {
     const { handleSubmit, submitting } = this.props;
 
+
     return (
-      <div>
-        <SignupAvatars onClick={this.addAvatar} />
+      <div className="login-form">
       <form
-        className={`card ${css(styles.card)}`}
+        className={"card"}
         onSubmit={handleSubmit(this.handleSubmit)}
       >
         <h3 style={{ marginBottom: '2rem', textAlign: 'center' }}>Create an account</h3>
@@ -91,6 +98,8 @@ const validate = (values) => {
   const errors = {};
   if (!values.username) {
     errors.username = 'Required';
+  } else if  (values.username.length > 18) {
+    errors.username = 'Must be less than 18 characters';
   }
   if (!values.email) {
     errors.email = 'Required';

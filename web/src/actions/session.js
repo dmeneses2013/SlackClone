@@ -3,9 +3,10 @@ import { Socket } from 'phoenix';
 import api from '../api';
 import { fetchUserRooms } from './rooms';
 import { connectToChannel } from './room';
+import API from '../../src/constants/config.js';
 
-const API_URL = process.env.REACT_APP_API_URL;
-const WEBSOCKET_URL = API_URL.replace(/(https|http)/, 'ws').replace('/api', '');
+const wsprefix = process.env.NODE_ENV === 'development' ? 'ws' : 'wss';
+const WEBSOCKET_URL = API.replace(/(https|http)/, wsprefix).replace('/api', '');
 
 
 function connectToSocket(dispatch) {
@@ -49,7 +50,7 @@ export function logout(history) {
     .then(() => {
       localStorage.removeItem('token');
       dispatch({ type: 'LOGOUT' });
-      history.push('/');
+      window.location = "/";
     });
 }
 

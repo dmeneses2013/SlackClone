@@ -1,11 +1,10 @@
-const JSON = require('circular-json');
-
 const initialState = {
   channel: null,
   currentRoom: {},
   messages: [],
   presentUsers: [],
   loadingOlderMessages: false,
+  topicFormIsVisible: false,
   pagination: {
     total_pages: 0,
     total_entries: 0,
@@ -15,7 +14,6 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
-  console.log("REDUE >>>> " + state.currentRoom.id)
   switch (action.type) {
     case 'ROOM_CONNECTED_TO_CHANNEL':
       return {
@@ -36,7 +34,6 @@ export default function (state = initialState, action) {
         ],
       };
     case 'ROOM_PRESENCE_UPDATE':
-    console.log("Room presnce update");
       return {
         ...state,
         presentUsers: action.presentUsers,
@@ -61,6 +58,36 @@ export default function (state = initialState, action) {
         ...state,
         loadingOlderMessages: false,
       };
+    case 'POST_ROOM_TOPIC':
+      return {
+        ...state,
+        loadingOlderMessages: true,
+      };
+    case 'POST_ROOM_TOPIC_SUCCESS':
+      return {
+        ...state,
+        topicFormIsVisible: false,
+        currentRoom: {
+          ...state.currentRoom,
+          topic: action.response.data.topic
+        }
+      };
+    case 'POST_ROOM_TOPIC_FAILURE':
+      return {
+        ...state,
+        loadingOlderMessages: true,
+      };
+    case 'TOPIC_FORM_IS_VISIBLE':
+      return {
+        ...state,
+        topicFormIsVisible: true,
+      };
+    case 'TOPIC_FORM_IS_HIDDEN':
+      return {
+        ...state,
+        topicFormIsVisible: false,
+      };
+
     default:
       return state;
   }
