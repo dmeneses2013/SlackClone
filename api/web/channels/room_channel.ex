@@ -4,6 +4,8 @@ defmodule Slackclone.RoomChannel do
 
   def join("room:" <> room_id, _params, socket) do
     room = Repo.get!(Slackclone.Room, room_id)
+    |> Repo.preload([:messages])
+    |> Repo.preload([:users])
 
     page =
       Slackclone.Message

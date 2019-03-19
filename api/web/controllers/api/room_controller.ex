@@ -6,6 +6,8 @@ defmodule Slackclone.RoomController do
 
   def index(conn, _params) do
     rooms = Repo.all(Room)
+    |> Repo.preload([:messages])
+    |> Repo.preload([:users])
     render(conn, "index.json", rooms: rooms)
   end
 
@@ -51,7 +53,8 @@ defmodule Slackclone.RoomController do
   def join(conn, %{"id" => room_id}) do
     current_user = Guardian.Plug.current_resource(conn)
     room = Repo.get(Room, room_id)
-
+    |> Repo.preload([:messages])
+    |> Repo.preload([:users])
     changeset = Slackclone.UserRoom.changeset(
       %Slackclone.UserRoom{},
       %{room_id: room.id, user_id: current_user.id}

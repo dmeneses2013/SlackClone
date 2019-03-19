@@ -36,7 +36,7 @@ class SignupForm extends Component {
 
   addAvatar = () => {
     const maxUrls = 9;
-    let random = this.getRandomInt(9);
+    let random = this.getRandomInt(8) + 1;
     let image = "https://s3-ap-southeast-2.amazonaws.com/slackclonedm/slack" + random +  ".png";
     return image;
   }

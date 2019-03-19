@@ -17,3 +17,6 @@ defmodule Slackclone.Room do
     |> unique_constraint(:name)
   end
 end
+
+alias Slackclone.Room
+alias Slackclone.User

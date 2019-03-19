@@ -38,6 +38,7 @@ class MessageList extends Component {
   }
 
   handleScroll = () => {
+    if (!this.stayScrolledElem) {return }
     var a = this.stayScrolledElem.scrollTop
     var b = this.stayScrolledElem.scrollHeight - this.stayScrolledElem.clientHeight;
     var c = a / b;
@@ -48,10 +49,11 @@ class MessageList extends Component {
   }
 
   checkShouldScroll = () => {
+    if (!this.stayScrolledElem) {return }
     var a = this.stayScrolledElem.scrollTop
     var b = this.stayScrolledElem.scrollHeight - this.stayScrolledElem.clientHeight;
     var c = a / b;
-    let shouldScroll = (c > 0.02)
+    let shouldScroll = (c > 0.1)
     if (shouldScroll) {
       this.scrollToBottom();
     }

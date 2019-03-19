@@ -99,13 +99,15 @@ box-sizing: content-box;
     .users {
       h2 {
         padding-left: 12px;
+        padding-bottom: 4px;
         line-height: 22px;
         font-weight: 500;
       }
       div {
         padding-left: 12px;
         height: 26px;
-        font-size: 0.90rem;
+        font-size: 0.96rem;
+        font-weight: 400
 
       }
     }
@@ -113,6 +115,11 @@ box-sizing: content-box;
 
 .dot {
   color: #2BAC76;
+}
+
+.empty-dot{
+  font-weight: 100;
+  color: darken(grey, 2);
 }
 
 }

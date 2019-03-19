@@ -41,13 +41,6 @@ type Props = {
 
 class Room extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      isLoading: true,
-    }
-  }
-
   componentDidMount() {
     if (this.props.socket === null) { return }
     this.props.connectToChannel(this.props.socket, this.props.match.params.id);
@@ -96,9 +89,21 @@ class Room extends Component {
     }
   }
 
+  configureUserList = () => {
+    var users = this.props.room.users
+    var presentUsers = this.props.presentUsers
+    if (!users || !presentUsers) { return}
+    users.sort((a,b) => (a.username > b.username) ? 1 : ((b.username > a.username) ? -1 : 0));
+    presentUsers.sort((a,b) => (a.username > b.username) ? 1 : ((b.username > a.username) ? -1 : 0));
+    var presentUsersNames = presentUsers.map(value => value.username);
+    users = users.filter(user => !presentUsersNames.includes(user.username));
+    users = presentUsers.concat(users);
+    return users
+  }
+
   handleTopicSubmit = (e) => {
-    const body = {"topic": e.target[0].defaultValue};
     e.preventDefault();
+    const body = {"topic": e.target[0].defaultValue};
     this.props.editTopic(this.props.room.id, body)
   }
 
@@ -117,7 +122,6 @@ class Room extends Component {
 
   render() {
     const moreMessages = this.props.pagination.total_pages > this.props.pagination.page_number;
-    const { isLoading } = this.state;
 
     return (
       <div style={{ display: 'flex', height: '100vh', width: '90%', minWidth: '400px'}} ref={(el) => { this.container = el; }}>

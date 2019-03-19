@@ -1,6 +1,8 @@
 const initialState = {
   channel: null,
-  currentRoom: {},
+  currentRoom: {
+    users: []
+  },
   messages: [],
   presentUsers: [],
   loadingOlderMessages: false,

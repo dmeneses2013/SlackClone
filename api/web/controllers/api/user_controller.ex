@@ -28,6 +28,8 @@ defmodule Slackclone.UserController do
     def rooms(conn, _params) do
       current_user = Guardian.Plug.current_resource(conn)
       rooms = Repo.all(assoc(current_user, :rooms))
+      |> Repo.preload([:messages])
+      |> Repo.preload([:users])
       render(conn, Slackclone.RoomView, "index.json", %{rooms: rooms})
     end
 end

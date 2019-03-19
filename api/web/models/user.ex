@@ -1,6 +1,8 @@
 defmodule Slackclone.User do
   use Slackclone.Web, :model
 
+  @derive {Poison.Encoder, only: [:username, :id]}
+
   schema "users" do
     field :username, :string
     field :email, :string

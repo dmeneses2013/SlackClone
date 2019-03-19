@@ -16,6 +16,8 @@ defmodule Slackclone.RoomView do
   def render("room.json", %{room: room}) do
     %{id: room.id,
       name: room.name,
-      topic: room.topic}
+      topic: room.topic,
+      users: room.users
+      }
   end
 end
